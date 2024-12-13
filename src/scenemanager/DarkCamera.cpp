@@ -32,6 +32,8 @@
 
 #include "tracer.h"
 
+#include "logger/logger.h"
+
 namespace Ogre {
 
 // ----------------------------------------------------------------------
@@ -41,6 +43,8 @@ DarkCamera::DarkCamera(const String &name, SceneManager *sm)
       mTraversal(mBspTree),
       mIsDirty(false)
 {
+    this->setProjectionType(PT_ORTHOGRAPHIC);
+    this->setOrthoWindowHeight(100);
 }
 
 // ----------------------------------------------------------------------

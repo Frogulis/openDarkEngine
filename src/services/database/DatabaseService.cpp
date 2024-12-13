@@ -34,6 +34,13 @@
 using namespace std;
 using namespace Ogre;
 
+String transformNameToLower(const std::string &name) {
+    // simple - just lowercase the name
+    String res = name;
+    StringUtil::toLowerCase(res);
+    return res;
+}
+
 namespace Opde {
 
 /*--------------------------------------------------------*/
@@ -168,9 +175,11 @@ void DatabaseService::unload(uint32_t dropMask) {
 FileGroupPtr DatabaseService::getDBFileNamed(const std::string &filename) {
     // TODO: Group of of the resource through the configuration service, once
     // written
+    auto lowername = transformNameToLower(filename);
+
     Ogre::DataStreamPtr stream =
         Ogre::ResourceGroupManager::getSingleton().openResource(
-            filename, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
+            lowername, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
     FilePtr fp(new OgreFile(stream));
 
     return FileGroupPtr(new DarkFileGroup(fp));

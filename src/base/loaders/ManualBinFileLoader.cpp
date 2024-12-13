@@ -33,6 +33,7 @@
 #include "logger.h"
 
 // #include "MaterialService.h"
+#include <iostream>
 
 #include <OgreBone.h>
 #include <OgreHardwareBufferManager.h>
@@ -1032,6 +1033,12 @@ void ObjectMeshLoader::readMaterials() {
     for (auto &mat : mMaterials) {
         // load a single material
         mFile->read(mat.name, 16);
+        int i = 0;
+        for(i = 0; mat.name[i] != '\0' && i < 16; i++) {
+            if (mat.name[i] >= 'A' && mat.name[i] <= 'Z') {
+                mat.name[i] = mat.name[i] + 32;
+            }
+        }
 
         *mFile >> mat.type >> mat.slot_num;
 
@@ -1303,25 +1310,37 @@ Ogre::MaterialPtr ObjectMeshLoader::prepareMaterial(const std::string &matname,
     }
 
     pass->setSpecular(0, 0, 0, 0);
-    pass->setCullingMode(Ogre::CULL_CLOCKWISE);
+    pass->setCullingMode(Ogre::CULL_NONE);
 
     if (mat.type == MD_MAT_TMAP) {
+        char lowerName[100];
+        size_t i;
+
+        for(i = 0; mat.name[i] != '\0'; i++)
+            if (mat.name[i] >= 'A' && mat.name[i] <= 'Z') {
+                lowerName[i] = mat.name[i] + 32;
+            }
+            else {
+                lowerName[i] = mat.name[i];
+            }
+        lowerName[i] = '\0';
+
         // TODO: This ugly code should be in some special service. Name it
         // ToolsService (getObjectTextureFileName, etc) and should handle
         // language setting!
-        std::string txtname = format("txt16/", mat.name);
+        std::string txtname = format("txt16/", lowerName);
 
         if (!Ogre::ResourceGroupManager::getSingleton().resourceExists(
                 Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                format("txt16/", mat.name))) {
+                txtname)) {
             // Not in txt16, will be in txt then...
-            txtname = format("txt/", mat.name);
+            txtname = format("txt/", lowerName);
 
             if (!Ogre::ResourceGroupManager::getSingleton().resourceExists(
                     Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
                     txtname)) {
-                OPDE_EXCEPT(format(
-                    "Can't find texture in txt16 or txt folder: ", mat.name));
+                        OPDE_EXCEPT(format(
+                            "Can't find texture in txt16 or txt folder: ", lowerName));
             }
         }
 
@@ -1582,6 +1601,12 @@ void AIMeshLoader::readMaterials() {
     int i = 0;
     for (auto &mat : mMaterials) {
         mat.read(*mFile, mVersion);
+        int i = 0;
+        for(i = 0; mat.name[i] != '\0' && i < 16; i++) {
+            if (mat.name[i] >= 'A' && mat.name[i] <= 'Z') {
+                mat.name[i] = mat.name[i] + 32;
+            }
+        }
 
         // prepare this as Ogre's material
         Ogre::MaterialPtr omat =
@@ -1689,7 +1714,7 @@ Ogre::MaterialPtr AIMeshLoader::prepareMaterial(const std::string &matname,
     pass->setAmbient(1, 1, 1);
     pass->setDiffuse(1, 1, 1, 1);
     pass->setSpecular(0, 0, 0, 0);
-    pass->setCullingMode(Ogre::CULL_CLOCKWISE);
+    pass->setCullingMode(Ogre::CULL_NONE);
 
     if (mat.type == MD_MAT_TMAP) {
         // Texture unit state for the main texture...

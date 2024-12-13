@@ -179,6 +179,9 @@ bool Portal::refreshScreenRect(const Vector3 &vpos, ScreenRectCache &rects,
     PortalRectInfo &pi = rects.portal(getID());
     pi.invalidate();
 
+    pi.screenRect.setToScreen();
+    return true;
+
     // Backface cull. The portal won't be culled if a vector camera-vertex
     // dotproduct normal will be greater than
     Vector3 camToV0 = mPoints[0] - vpos;
@@ -186,8 +189,8 @@ bool Portal::refreshScreenRect(const Vector3 &vpos, ScreenRectCache &rects,
     pi.portalCull = (dotp > 0);
 
     // skip these expensive operations if we encounter a backface cull
-    if (pi.portalCull)
-        return false;
+    // if (pi.portalCull)
+    //     return false;
 
     // portal points plane cutting and to-screen proj.
     int positive = 0;
@@ -195,8 +198,8 @@ bool Portal::refreshScreenRect(const Vector3 &vpos, ScreenRectCache &rects,
 
     unsigned int pointcount = mPoints.size();
 
-    if (pointcount == 0)
-        return 0;
+    // if (pointcount == 0)
+    //     return 0;
 
     assert(pointcount < MAX_PORTAL_POINTS);
 
@@ -225,10 +228,10 @@ bool Portal::refreshScreenRect(const Vector3 &vpos, ScreenRectCache &rects,
     }
 
     // Now that we have the poly's side classified, we can process it...
-    if (positive == 0) {
-        // we clipped away the whole portal. No need to cut
-        return false;
-    }
+    // if (positive == 0) {
+    //     // we clipped away the whole portal. No need to cut
+    //     return false;
+    // }
 
     // some vertices were on one side, some on the other
     long prev = pointcount - 1; // the last one

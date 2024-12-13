@@ -65,6 +65,8 @@
 #include "stdlog.h"
 #include "tracer.h"
 
+#include <iostream>
+
 namespace Opde {
 // -------------------------------------------------------
 // singleton related
@@ -211,10 +213,13 @@ void Root::loadResourceConfig(const std::string &fileName) {
 
     for (const auto &sec : settings) {
         const Ogre::String &secName = sec.first;
+        std::cout << "secName " << sec.first;
         for (const auto &set : sec.second) {
+            std::cout << "(" << set.first << "," << set.second << "), ";
             Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
                 set.second, set.first, secName);
         }
+        std::cout << "\n";
     }
 }
 

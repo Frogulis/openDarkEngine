@@ -91,3 +91,5 @@ find_package_handle_standard_args(SDL2
                                   VERSION_VAR SDL2_VERSION_STRING)
 
 mark_as_advanced(SDL2_INCLUDE_DIR SDL2_LIBRARY)
+
+link_directories("/home/jamie/boost_1_78_0/stage/lib")

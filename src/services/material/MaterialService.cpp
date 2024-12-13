@@ -42,6 +42,8 @@
 #include <OgreTexture.h>
 #include <OgreTextureManager.h>
 
+#include <iostream>
+
 using namespace std;
 using namespace Ogre;
 
@@ -162,15 +164,21 @@ void MaterialService::loadMaterials(const FileGroupPtr &db) {
     for (unsigned int id = 1; id < mTxlistHeader.txt_count; id++) {
         // Try to find the family for the texture
         std::string path = getMaterialName(id);
+        std::transform(path.begin(), path.end(), path.begin(),
+            [](unsigned char c){ return std::tolower(c); });
 
         // Resulting material name
         Ogre::StringStream matName;
         matName << "@template" << id;
 
+        // std::cout << "hey hey! " << path << " and " << matName.str() << "\n";
+
         if (MaterialManager::getSingleton().resourceExists(
-                matName.str())) // if the material is already defined
+                matName.str())) {// if the material is already defined
             // remove, as we have to redefine it
+            std::cout << "removing " << matName.str() << "\n";
             MaterialManager::getSingleton().remove(matName.str());
+        }
 
         // See if the material is defined by a script. If so, clone it to be
         // named @templateXXXX (XXXX = texture number) We seek material named:
@@ -552,6 +560,10 @@ void MaterialService::createStandardMaterial(unsigned int idx,
                                              std::string resourceGroup) {
     Image tex;
     bool loaded = false; // indicates we were successful finding the texture
+
+    std::transform(textureName.begin(), textureName.end(), textureName.begin(),
+        [](unsigned char c){ return std::tolower(c); });
+
     LOG_INFO("MaterialService: Searching for '%s' in '%s'", textureName.c_str(),
              resourceGroup.c_str());
 
@@ -626,7 +638,7 @@ void MaterialService::createStandardMaterial(unsigned int idx,
     // tus->setTextureFiltering(TFO_NONE);
 
     // Set culling mode to none
-    // shadMat->setCullingMode(CULL_ANTICLOCKWISE);
+    shadMat->setCullingMode(CULL_NONE);
 
     // No dynamic lighting
     shadMat->setLightingEnabled(false);
@@ -658,7 +670,7 @@ void MaterialService::createSkyHackMaterial(const Ogre::String &resourceGroup) {
         shadPass->setColourWriteEnabled(false);
 
         // Set culling mode to none
-        shadPass->setCullingMode(CULL_NONE);
+        shadPass->setCullingMode(CULL_CLOCKWISE);
 
         // No dynamic lighting (Sky!)
         shadPass->setLightingEnabled(false);

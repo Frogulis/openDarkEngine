@@ -31,6 +31,8 @@
 #include <OgreConfigFile.h>
 #include <OgreException.h>
 
+#include <iostream>
+
 using namespace std;
 using namespace Ogre;
 
@@ -89,6 +91,7 @@ Variant ConfigService::getParam(const std::string &param,
     }
 
     if (it != mParameters.end()) {
+        std::cout << it->first << ", " << it->second << "\n";
         return Variant(it->second);
     } else {
         return dflt;
@@ -100,6 +103,7 @@ bool ConfigService::getParam(const std::string &param, Variant &tgt) {
     Parameters::const_iterator it = mParameters.find(param);
 
     if (it != mParameters.end()) {
+        std::cout << it->first << ", " << it->second << "\n";
         tgt = it->second;
         return true;
     } else {

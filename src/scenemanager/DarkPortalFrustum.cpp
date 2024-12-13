@@ -165,9 +165,9 @@ int PortalFrustum::getPortalClassification(const Portal &src) const {
         if (fabs(dist) < radius) // intersection
             return 0;
 
-        if (dist < -radius) // totally outside, so we can safely say we do not
-                            // see the poly by our frustum
-            return -1;
+        // if (dist < -radius) // totally outside, so we can safely say we do not
+        //                     // see the poly by our frustum
+        //     return -1;
     }
 
     return 1;

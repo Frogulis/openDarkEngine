@@ -45,6 +45,8 @@
 #include <OgreRenderWindow.h>
 #include <OgreStringConverter.h>
 
+#include <iostream>
+
 using namespace Ogre;
 
 namespace Opde {
@@ -89,6 +91,12 @@ GamePlayState::GamePlayState() : mSceneMgr(NULL), mToLoadScreen(true) {
     mBackward = false;
     mLeft = false;
     mRight = false;
+    mUp = false;
+    mDown = false;
+    mGoFast = false;
+
+    mZoomIn = false;
+    mZoomOut = false;
 
     mScreenShot = false;
     mSceneDisplay = false;
@@ -145,7 +153,7 @@ void GamePlayState::start() {
     mSceneMgr->setSpecialCaseRenderQueueMode(SceneManager::SCRQM_EXCLUDE);
 
     mCamera->setNearClipDistance(0.5);
-    mCamera->setFarClipDistance(4000);
+    mCamera->setFarClipDistance(20000);
 
     // Also change position, and set Quake-type orientation
     ViewPoint vp = mSceneMgr->getSuggestedViewpoint(true);
@@ -212,7 +220,12 @@ void GamePlayState::resume() {
 }
 
 void GamePlayState::update(unsigned long timePassed) {
-    mMoveScale = mMoveSpeed * timePassed / 1000000.0f;
+    float moveMultiplier = 1.0f;
+    if (mGoFast) {
+        moveMultiplier = 3.0f;
+    }
+
+    mMoveScale = moveMultiplier * mMoveSpeed * timePassed / 1000000.0f;
     mRotScale = mRotateSpeed * timePassed / 1000000.0f;
 
     // Quick hack. Let the camera move:
@@ -228,8 +241,23 @@ void GamePlayState::update(unsigned long timePassed) {
     if (mRight)
         mTranslateVector.x = mMoveScale;
 
+    if (mUp)
+        mTranslateVector.y = mMoveScale;
+
+    if (mDown)
+        mTranslateVector.y = -mMoveScale;
+
     mCamera->yaw(mRotX * mRotScale);
     mCamera->pitch(mRotY * mRotScale);
+
+    if (mZoomIn) {
+        Real windowHeight = mCamera->getOrthoWindowHeight();
+        mCamera -> setOrthoWindowHeight(windowHeight - 10);
+    } else if (mZoomOut) {
+        Real windowHeight = mCamera->getOrthoWindowHeight();
+        mCamera -> setOrthoWindowHeight(windowHeight + 10);
+    }
+    
     mCamera->moveRelative(mTranslateVector);
 
     mTranslateVector = Vector3::ZERO;
@@ -275,6 +303,27 @@ bool GamePlayState::keyPressed(const SDL_KeyboardEvent &e) {
     } else if (e.keysym.sym == SDLK_d) {
         mRight = true;
         return true;
+    } else if (e.keysym.sym == SDLK_SPACE) {
+        mUp = true;
+        return true;
+    } else if (e.keysym.sym == SDLK_x) {
+        mDown = true;
+        return true;
+    } else if (e.keysym.sym == SDLK_f) {
+        // a hack to look directly downwards
+        Vector3 vector(0, 0, -1);
+        Vector3 target = mCamera->getPosition() + vector;
+        mCamera->lookAt(target);
+        return true;
+    } else if (e.keysym.sym == SDLK_LSHIFT) {
+        mGoFast = true;
+        return true;
+    } else if (e.keysym.sym == SDLK_z) {
+        mZoomIn = true;
+        return true;
+    } else if (e.keysym.sym == SDLK_c) {
+        mZoomOut = true;
+        return true;
     } else if (e.keysym.sym == SDLK_PRINTSCREEN || e.keysym.sym == SDLK_F5) {
         mScreenShot = true;
         return true;
@@ -298,6 +347,21 @@ bool GamePlayState::keyReleased(const SDL_KeyboardEvent &e) {
         return true;
     } else if (e.keysym.sym == SDLK_d) {
         mRight = false;
+        return true;
+    } else if (e.keysym.sym == SDLK_SPACE) {
+        mUp = false;
+        return true;
+    } else if (e.keysym.sym == SDLK_x) {
+        mDown = false;
+        return true;
+    } else if (e.keysym.sym == SDLK_LSHIFT) {
+        mGoFast = false;
+        return true;
+    } else if (e.keysym.sym == SDLK_z) {
+        mZoomIn = false;
+        return true;
+    } else if (e.keysym.sym == SDLK_c) {
+        mZoomOut = false;
         return true;
     } else if (e.keysym.sym == SDLK_ESCAPE) {
         requestTermination();

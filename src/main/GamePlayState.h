@@ -80,6 +80,13 @@ protected:
     bool mBackward;
     bool mLeft;
     bool mRight;
+    bool mUp;
+    bool mDown;
+
+    bool mGoFast;
+
+    bool mZoomIn;
+    bool mZoomOut;
 
     // Screenshot requested
     bool mScreenShot;
