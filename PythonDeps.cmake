@@ -6,7 +6,7 @@ MACRO(FIND_PYTHON_DEPS _LIBS_TO_ADD)
 
     # Execute the one-liner to get the python deps
     IF(PYTHONINTERP_FOUND)
-	EXEC_PROGRAM(${PYTHON_EXECUTABLE} ARGS "-c 'from distutils.sysconfig import get_config_var; print(get_config_var(\"LIBS\") + \" \" + get_config_var(\"SYSLIBS\"))'"
+	EXEC_PROGRAM(${PYTHON_EXECUTABLE} ARGS "-c 'import warnings; warnings.filterwarnings(\"ignore\"); from distutils.sysconfig import get_config_var; print(get_config_var(\"LIBS\") + \" \" + get_config_var(\"SYSLIBS\"))'"
         OUTPUT_VARIABLE PYDEPS
         RETURN_VALUE PYRET
     )
