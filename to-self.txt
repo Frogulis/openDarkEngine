@@ -1,0 +1,17 @@
+hello, self
+
+you're wondering how to run this
+
+go to ../build
+
+cmake ../openDarkEngine/
+
+make
+
+cd src/main
+
+./opdeMain
+
+if you did the linking to the particular boost version from somewhere weird like your home folder, you'll need
+
+LD_LIBRARY_PATH=/home/me/boost_1_78_0/stage/lib/ ./opdeMain

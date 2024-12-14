@@ -315,6 +315,36 @@ bool GamePlayState::keyPressed(const SDL_KeyboardEvent &e) {
         Vector3 target = mCamera->getPosition() + vector;
         mCamera->lookAt(target);
         return true;
+    } else if (e.keysym.sym == SDLK_g) {
+        // a hack to look directly sidewards
+        Vector3 vector(-1, 0, 0);
+        Vector3 target = mCamera->getPosition() + vector;
+        mCamera->lookAt(target);
+        return true;
+    } else if (e.keysym.sym == SDLK_h) {
+        // a hack to look directly sidewards
+        Vector3 vector(0, 1, 0);
+        Vector3 target = mCamera->getPosition() + vector;
+        mCamera->lookAt(target);
+        return true;
+    } else if (e.keysym.sym == SDLK_v) {
+        // a hack to look directly downwards
+        Vector3 vector(0, 0, 1);
+        Vector3 target = mCamera->getPosition() + vector;
+        mCamera->lookAt(target);
+        return true;
+    } else if (e.keysym.sym == SDLK_b) {
+        // a hack to look directly sidewards
+        Vector3 vector(1, 0, 0);
+        Vector3 target = mCamera->getPosition() + vector;
+        mCamera->lookAt(target);
+        return true;
+    } else if (e.keysym.sym == SDLK_n) {
+        // a hack to look directly sidewards
+        Vector3 vector(0, -1, 0);
+        Vector3 target = mCamera->getPosition() + vector;
+        mCamera->lookAt(target);
+        return true;
     } else if (e.keysym.sym == SDLK_LSHIFT) {
         mGoFast = true;
         return true;
