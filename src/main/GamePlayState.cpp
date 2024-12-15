@@ -345,6 +345,28 @@ bool GamePlayState::keyPressed(const SDL_KeyboardEvent &e) {
         Vector3 target = mCamera->getPosition() + vector;
         mCamera->lookAt(target);
         return true;
+    } else if (e.keysym.sym == SDLK_q) {
+        // a hack to roll anticlockwise
+        Quaternion orientation = mCamera->getOrientation();
+        Vector3 x = orientation.xAxis();
+        Vector3 y = orientation.yAxis();
+        Vector3 z = orientation.zAxis();
+
+        orientation.FromAxes(y, -x, z);
+
+        mCamera->setOrientation(orientation);
+        return true;
+    } else if (e.keysym.sym == SDLK_e) {
+        // a hack to roll clockwise
+        Quaternion orientation = mCamera->getOrientation();
+        Vector3 x = orientation.xAxis();
+        Vector3 y = orientation.yAxis();
+        Vector3 z = orientation.zAxis();
+
+        orientation.FromAxes(-y, x, z);
+
+        mCamera->setOrientation(orientation);
+        return true;
     } else if (e.keysym.sym == SDLK_LSHIFT) {
         mGoFast = true;
         return true;

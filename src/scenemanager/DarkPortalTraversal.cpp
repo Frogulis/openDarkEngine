@@ -79,8 +79,10 @@ void DarkPortalTraversal::traverse(const Vector3 &pos,
         if (cell == NULL)
             continue;
 
-        if (cell->isVisBlocked())
-            continue;
+        // removing this check as it prevents rendering the whole map at once
+        // not ideal for me when my intention is to render the whole map at once
+        // if (cell->isVisBlocked())
+        //     continue;
 
         // (Re-)evaluate the vision through all portals. If some of those
         // changed, add the cells to the queue (or move those to top if already
