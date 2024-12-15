@@ -1,3 +1,32 @@
+# Note to the reader
+This is a fork of the main OPDE repo with no intention of merging back.
+If you want the primary source code for OPDE, go look at that.
+
+This is a fork which I have been hacking on for the purpose of rendering maps and "dollhouse" views of the first two Thief games.
+If that's something you're interested in seeing, you can check it out [on my website](https://frogulis.net/thief-dollhouse/).
+
+If you want to run this... good luck. I don't really remember what I've done, but if you're on Linux I suspect you will need to:
+- compile OGRE
+- fiddle in cmake
+- possibly rename a HEAP of game files to handle case sensitivity
+- ???
+
+If you're on windows, maybe it'll just work.
+I get the impression the original developer was using Windows.
+
+The main changes I've made are:
+- change to orthographic view
+- render the entire map at once
+- extra controls
+
+These controls are:
+- Space and X to move the camera along its local Y axis (up and down)
+- Q and E to roll the camera 90 degrees counter-clockwise and clockwise
+- F, G, H, V, B, N to set the camera to the 6 "cardinal" directions
+
+The changes I've made to the code in order to do this were not made with any consideration for others or for the future.
+Have fun! :D
+
 # openDarkEngine
 
 This is a readme file for the openDarkEngine project.
