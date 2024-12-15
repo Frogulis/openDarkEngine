@@ -7,7 +7,7 @@ If that's something you're interested in seeing, you can check it out [on my web
 
 If you want to run this... good luck. I don't really remember what I've done, but if you're on Linux I suspect you will need to:
 - compile OGRE
-- fiddle in cmake
+- fiddle around with cmake
 - possibly rename a HEAP of game files to handle case sensitivity
 - ???
 
